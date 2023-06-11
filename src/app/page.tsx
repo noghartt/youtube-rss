@@ -38,7 +38,6 @@ export default function Index() {
       return;
     }
 
-    console.log(rss);
     setValue(rss);
   }
 
