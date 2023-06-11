@@ -1,11 +1,12 @@
 'use client'
 
 import { Center, FormControl, FormLabel, Input, Button, useClipboard, useToast } from '@chakra-ui/react';
-import { FormEventHandler, useEffect } from 'react';
+import { FormEventHandler, useEffect, useState } from 'react';
 import { FaRss } from 'react-icons/fa';
 
 export default function Index() {
   const toast = useToast();
+  const [isSubmit, setIsSubmit] = useState(false);
   const { onCopy, value, setValue, hasCopied } = useClipboard('');
 
   useEffect(() => {
@@ -18,6 +19,7 @@ export default function Index() {
 
   const handleFormSubmit: FormEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault();
+    setIsSubmit(true);
     const formData = new FormData(e.currentTarget as unknown as HTMLFormElement);
 
     const url = formData.get('url') as string;
@@ -59,6 +61,7 @@ export default function Index() {
       duration: 5000,
       isClosable: true,
     });
+    setIsSubmit(false);
   }
 
   return (
@@ -68,7 +71,16 @@ export default function Index() {
           Insert a YouTube channel link:
           <Input name='url' type='url' />
         </FormLabel>
-        <Button type='submit' colorScheme='orange' w='full' leftIcon={<FaRss />}>Get RSS link</Button>
+        <Button
+          type='submit'
+          colorScheme='orange'
+          w='full' 
+          disabled={isSubmit}
+          isLoading={isSubmit}
+          leftIcon={<FaRss />}
+        >
+          Get RSS link
+        </Button>
       </FormControl>
     </Center>
   )
