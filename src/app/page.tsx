@@ -1,10 +1,11 @@
 'use client'
 
-import { Center, FormControl, FormLabel, Input, Button, useClipboard } from '@chakra-ui/react';
+import { Center, FormControl, FormLabel, Input, Button, useClipboard, useToast } from '@chakra-ui/react';
 import { FormEventHandler, useEffect } from 'react';
 import { FaRss } from 'react-icons/fa';
 
 export default function Index() {
+  const toast = useToast();
   const { onCopy, value, setValue, hasCopied } = useClipboard('');
 
   useEffect(() => {
@@ -32,6 +33,17 @@ export default function Index() {
     }
 
     const query = await fetch(`/api?url=${url}`);
+
+    if (!query.ok) {
+      toast({
+        title: 'Something went wrong',
+        description: 'Please try again later.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+
     const { rss } = await query.json();
 
     if (!rss) {
@@ -39,6 +51,14 @@ export default function Index() {
     }
 
     setValue(rss);
+
+    toast({
+      title: 'RSS link copied',
+      description: 'You can now paste it in your favorite RSS reader.',
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    });
   }
 
   return (
