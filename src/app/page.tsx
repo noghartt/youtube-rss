@@ -15,9 +15,9 @@ export default function Index() {
     setValue('');
   }, [onCopy, value, hasCopied, setValue]);
 
-  const handleFormSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+  const handleFormSubmit: FormEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(e.currentTarget as unknown as HTMLFormElement);
 
     const url = formData.get('url') as string;
 
